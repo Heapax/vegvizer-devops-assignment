@@ -6,7 +6,7 @@ async function run() {
   try {
     // Get input
     const apiUrl = core.getInput('api-url', { required: true });
-    console.log(`Calling API: ${apiUrl}`);
+    core.info(`📡 Calling API: ${apiUrl}`);
 
     // Call the API
     const response = await fetch(apiUrl);
@@ -16,7 +16,8 @@ async function run() {
     }
 
     const data = await response.json();
-    console.log('API Response:', JSON.stringify(data, null, 2));
+    core.info('✓ API Response received:');
+    console.log(JSON.stringify(data, null, 2));
 
     // Validate response structure
     if (!data.status || !data.service || !data.timestamp) {
@@ -26,11 +27,13 @@ async function run() {
     // Generate Markdown
     const markdown = `## API Status
 
-- Status: ${data.status}
-- Service: ${data.service}
-- Timestamp: ${data.timestamp}`;
+- **Status**: ${data.status}
+- **Service**: ${data.service}
+- **Timestamp**: ${data.timestamp}${data.uptime ? `
+- **Uptime**: ${data.uptime}s` : ''}`;
 
-    console.log('Generated Markdown:\n', markdown);
+    core.info('✓ Generated Markdown:');
+    console.log(markdown);
 
     // Update README.md
     const readmePath = path.join(process.env.GITHUB_WORKSPACE, 'README.md');
@@ -62,15 +65,17 @@ async function run() {
     // Write updated content back to README
     fs.writeFileSync(readmePath, updatedContent, 'utf8');
     
-    console.log('✓ README.md updated successfully');
+    core.info('✓ README.md updated successfully');
 
     // Set outputs
     core.setOutput('status', data.status);
     core.setOutput('service', data.service);
     core.setOutput('timestamp', data.timestamp);
+    
+    core.info('✓ Action completed successfully');
 
   } catch (error) {
-    core.setFailed(`Action failed: ${error.message}`);
+    core.setFailed(`✗ Action failed: ${error.message}`);
   }
 }
 
