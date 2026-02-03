@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Node.js API service for DevOps assignment",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "start": "node src/server.js",
     "test": "echo \"No tests specified\" && exit 0"
@@ -13,7 +14,7 @@
     "devops"
   ],
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {}
 }
