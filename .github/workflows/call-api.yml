@@ -9,44 +9,73 @@ permissions:
 jobs:
   update-readme:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+        
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
+          
       - name: Install project dependencies
         run: npm install
-
+        
       - name: Install action dependencies
         working-directory: .github/actions/call-node-api
         run: npm install
-
+        
       - name: Start Node.js API in background
         run: |
           npm start &
-          echo "Waiting for API to start..."
-          sleep 5
-
-      - name: Verify API is running
+          API_PID=$!
+          echo "API_PID=$API_PID" >> $GITHUB_ENV
+          echo "API started with PID: $API_PID"
+          
+      - name: Wait for API to be ready
         run: |
-          curl -f http://localhost:3000/status || exit 1
-
+          echo "Waiting for API to start..."
+          max_attempts=30
+          attempt=0
+          until curl -f http://localhost:3000/health > /dev/null 2>&1 || [ $attempt -eq $max_attempts ]; do
+            attempt=$((attempt + 1))
+            echo "Attempt $attempt/$max_attempts..."
+            sleep 1
+          done
+          
+          if [ $attempt -eq $max_attempts ]; then
+            echo "API failed to start"
+            exit 1
+          fi
+          
+          echo "✓ API is ready!"
+          
+      - name: Verify API status endpoint
+        run: |
+          echo "Testing /status endpoint..."
+          curl -v http://localhost:3000/status
+          
       - name: Call custom GitHub Action
         uses: ./.github/actions/call-node-api
         with:
-          api-url: 'http://localhost:3000/status'
-
+          api-url: http://localhost:3000/status
+          
       - name: Commit and push changes
         run: |
-          git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add README.md
-          git diff --staged --quiet || git commit -m "Update API status in README [skip ci]"
+          git commit -m "Update API status in README [skip ci]"
           git push
+          echo "✓ Changes committed and pushed"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Cleanup
+        if: always()
+        run: |
+          if [ -n "$API_PID" ]; then
+            echo "Stopping API (PID: $API_PID)"
+            kill $API_PID 2>/dev/null || true
+          fi
