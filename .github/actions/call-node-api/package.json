@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Custom GitHub Action to call Node.js API and update README",
   "main": "index.js",
+  "type": "module",
   "dependencies": {
     "@actions/core": "^3.0.0"
   },
