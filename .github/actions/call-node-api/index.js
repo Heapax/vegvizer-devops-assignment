@@ -6,7 +6,7 @@ async function run() {
   try {
     // Get input
     const apiUrl = core.getInput('api-url', { required: true });
-    core.info(`📡 Calling API: ${apiUrl}`);
+    core.info(`Calling API: ${apiUrl}`);
 
     // Call the API
     const response = await fetch(apiUrl);
