@@ -34,8 +34,9 @@ This project implements an automated system that:
 
 ## API Documentation
 
-### Endpoint: GET /status
+### Endpoints
 
+#### `GET /status`
 Returns the current status of the service.
 
 **Response Format:**
@@ -43,7 +44,39 @@ Returns the current status of the service.
 {
   "status": "ok",
   "service": "devops-assignment",
-  "timestamp": "2025-01-01T10:00:00.000Z"
+  "timestamp": "2025-02-03T10:00:00.000Z",
+  "uptime": 42
+}
+```
+
+**Fields:**
+- `status` - Service health status (string)
+- `service` - Service name (string)
+- `timestamp` - Current ISO 8601 timestamp (string)
+- `uptime` - Server uptime in seconds (number)
+
+#### `GET /health`
+Simple health check endpoint for monitoring.
+
+**Response Format:**
+```json
+{
+  "healthy": true
+}
+```
+
+#### `GET /`
+Returns API information and available endpoints.
+
+**Response Format:**
+```json
+{
+  "name": "DevOps Assignment API",
+  "version": "1.0.0",
+  "endpoints": {
+    "status": "/status",
+    "health": "/health"
+  }
 }
 ```
 
@@ -75,16 +108,47 @@ The API will be available at `http://localhost:3000`
 
 ### Testing the API
 
+Test all available endpoints:
+
 ```bash
+# Root endpoint (API info)
+curl http://localhost:3000/
+
+# Status endpoint (used by GitHub Action)
 curl http://localhost:3000/status
+
+# Health check endpoint
+curl http://localhost:3000/health
 ```
 
-Expected output:
+**Expected outputs:**
+
+**Root (`/`):**
+```json
+{
+  "name": "DevOps Assignment API",
+  "version": "1.0.0",
+  "endpoints": {
+    "status": "/status",
+    "health": "/health"
+  }
+}
+```
+
+**Status (`/status`):**
 ```json
 {
   "status": "ok",
   "service": "devops-assignment",
-  "timestamp": "2025-02-03T10:30:00.000Z"
+  "timestamp": "2025-02-03T10:30:00.000Z",
+  "uptime": 42
+}
+```
+
+**Health (`/health`):**
+```json
+{
+  "healthy": true
 }
 ```
 
@@ -96,13 +160,16 @@ Expected output:
 2. **Repository Checkout**: Checks out the code
 3. **Node.js Setup**: Installs Node.js 20
 4. **Dependency Installation**: Installs both project and action dependencies
-5. **API Startup**: Starts the Node.js API in the background
-6. **API Verification**: Verifies the API is responding
-7. **Custom Action Execution**: Calls our custom action which:
+5. **API Startup**: Starts the Node.js API in the background and tracks its process ID
+6. **Health Verification**: Waits for API to be ready using the `/health` endpoint with retry logic (up to 30 attempts)
+7. **Status Check**: Verifies the `/status` endpoint is working correctly
+8. **Custom Action Execution**: Calls our custom action which:
    - Fetches data from the API
-   - Generates markdown
-   - Updates the README.md
-8. **Commit & Push**: Commits the updated README back to the repository
+   - Validates the response
+   - Generates formatted markdown
+   - Updates the README.md between marker comments
+9. **Commit & Push**: Commits the updated README back to the repository (only if changes exist)
+10. **Cleanup**: Stops the API server process (runs even if workflow fails)
 
 ### Running the Workflow
 
@@ -135,31 +202,32 @@ The action is implemented in JavaScript using:
 ## Live API Status
 
 <!-- API_STATUS_START -->
-## API Status
-
-- **Status**: ok
-- **Service**: devops-assignment
-- **Timestamp**: 2026-02-03T19:26:17.380Z
-- **Uptime**: 5s
+*The API status will be automatically updated here when the workflow runs*
 <!-- API_STATUS_END -->
 
 ## Technical Stack
 
 - **Runtime**: Node.js 20
+- **Module System**: ES Modules (modern JavaScript)
 - **API Framework**: Native Node.js HTTP module
 - **CI/CD**: GitHub Actions
-- **Custom Action**: JavaScript (Node.js 20)
+- **Custom Action**: JavaScript with ES Modules (Node.js 20)
 - **Automation**: Shell scripts, Git commands
 
 ## Key Features
 
 ✅ Clean GitHub Actions implementation  
-✅ Proper error handling throughout  
-✅ RESTful API design  
+✅ Proper error handling and recovery  
+✅ RESTful API design with multiple endpoints  
 ✅ Structured repository layout  
 ✅ End-to-end automation workflow  
 ✅ Automatic README updates  
 ✅ Proper use of GitHub tokens and permissions  
+✅ Health check and monitoring endpoints  
+✅ Graceful shutdown handling  
+✅ Reliable workflow with retry logic  
+✅ Process cleanup and resource management  
+✅ Modern ES module syntax throughout  
 
 ## DevOps Best Practices
 
@@ -167,25 +235,39 @@ The action is implemented in JavaScript using:
 - **Automation**: Zero manual steps after workflow trigger
 - **Idempotency**: Workflow can be run multiple times safely
 - **Security**: Uses GitHub tokens with minimal required permissions
-- **Logging**: Comprehensive logging throughout the process
+- **Logging**: Comprehensive logging with visual indicators throughout the process
 - **Error Handling**: Graceful failure handling with informative messages
+- **Monitoring**: Health check endpoints for observability
+- **Resource Management**: Proper process cleanup and shutdown handling
+- **Retry Logic**: Robust API readiness verification
+- **Modern Standards**: ES modules and current JavaScript best practices
 
 ## Troubleshooting
 
 ### API not starting
 - Check if port 3000 is available
-- Verify Node.js is installed correctly
+- Verify Node.js is installed correctly (version 18+)
 - Review workflow logs for startup errors
+- Check that both package.json files have `"type": "module"`
 
 ### Workflow failing
 - Ensure `contents: write` permission is set
 - Verify README contains the marker comments
 - Check action dependencies are installed
+- Review workflow logs for specific error messages
+- Ensure health check endpoint is accessible
 
 ### README not updating
-- Confirm API is responding correctly
+- Confirm API is responding correctly to `/status` endpoint
 - Verify Git credentials are configured
 - Check for merge conflicts
+- Ensure marker comments exist exactly as specified
+
+### Health check timing out
+- API may need more time to start
+- Check server logs for errors
+- Verify port 3000 is accessible
+- Consider increasing retry attempts in workflow
 
 ---
 
