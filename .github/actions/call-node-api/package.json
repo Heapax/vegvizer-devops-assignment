@@ -1,0 +1,14 @@
+{
+  "name": "call-node-api-action",
+  "version": "1.0.0",
+  "description": "Custom GitHub Action to call Node.js API and update README",
+  "main": "index.js",
+  "dependencies": {
+    "@actions/core": "^3.0.0"
+  },
+  "keywords": [
+    "github-action",
+    "api",
+    "automation"
+  ]
+}

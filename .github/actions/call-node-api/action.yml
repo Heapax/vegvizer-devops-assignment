@@ -1,0 +1,15 @@
+name: 'Call Node API'
+description: 'Calls the Node.js API and updates the README with status information'
+
+inputs:
+  api-url:
+    description: 'URL of the API endpoint to call'
+    required: true
+
+runs:
+  using: 'node20'
+  main: 'index.js'
+
+branding:
+  icon: 'activity'
+  color: 'blue'
