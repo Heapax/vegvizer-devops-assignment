@@ -202,7 +202,12 @@ The action is implemented in JavaScript using:
 ## Live API Status
 
 <!-- API_STATUS_START -->
-*The API status will be automatically updated here when the workflow runs*
+## API Status
+
+- **Status**: ok
+- **Service**: devops-assignment
+- **Timestamp**: 2026-02-03T20:31:18.399Z
+- **Uptime**: 5s
 <!-- API_STATUS_END -->
 
 ## Technical Stack
