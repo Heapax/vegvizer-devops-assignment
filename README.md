@@ -3,7 +3,6 @@
 ![Node.js](https://img.shields.io/badge/node.js-20-green)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-workflow-blue)
 ![ES Modules](https://img.shields.io/badge/ES-Modules-yellow)
-![License](https://img.shields.io/badge/license-MIT-blue)
 
 This repository demonstrates a complete DevOps automation workflow using GitHub Actions, Node.js, and custom JavaScript actions.
 
@@ -104,7 +103,7 @@ Returns API information and available endpoints.
 ## Running the API Locally
 
 ### Prerequisites
-- Node.js 14.x or higher
+- Node.js 20.x or higher
 - npm (comes with Node.js)
 
 ### Installation
