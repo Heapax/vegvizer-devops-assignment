@@ -1,6 +1,27 @@
 # DevOps Assignment - Automation Engineer
 
+![Node.js](https://img.shields.io/badge/node.js-20-green)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-workflow-blue)
+![ES Modules](https://img.shields.io/badge/ES-Modules-yellow)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 This repository demonstrates a complete DevOps automation workflow using GitHub Actions, Node.js, and custom JavaScript actions.
+
+## 📑 Table of Contents
+
+- [Overview](#overview)
+- [Project Structure](#project-structure)
+- [API Documentation](#api-documentation)
+- [Running the API Locally](#running-the-api-locally)
+- [GitHub Workflow](#github-workflow)
+- [Custom GitHub Action](#custom-github-action)
+- [Live API Status](#live-api-status)
+- [Technical Stack](#technical-stack)
+- [Key Features](#key-features)
+- [DevOps Best Practices](#devops-best-practices)
+- [Troubleshooting](#troubleshooting)
+
+---
 
 ## Overview
 
@@ -202,12 +223,7 @@ The action is implemented in JavaScript using:
 ## Live API Status
 
 <!-- API_STATUS_START -->
-## API Status
-
-- **Status**: ok
-- **Service**: devops-assignment
-- **Timestamp**: 2026-02-03T20:31:18.399Z
-- **Uptime**: 5s
+*The API status will be automatically updated here when the workflow runs*
 <!-- API_STATUS_END -->
 
 ## Technical Stack
