@@ -1,9 +1,5 @@
 # DevOps Assignment - Automation Engineer
 
-![Node.js](https://img.shields.io/badge/node.js-20-green)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-workflow-blue)
-![ES Modules](https://img.shields.io/badge/ES-Modules-yellow)
-
 This repository demonstrates a complete DevOps automation workflow using GitHub Actions, Node.js, and custom JavaScript actions.
 
 ## 📑 Table of Contents
